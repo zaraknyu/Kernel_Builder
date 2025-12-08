@@ -88,9 +88,16 @@ jobs:
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
-        name: Build-${{ steps.buildKernel.outputs.buildDetails }}
+        name: Xiaomi-Warm-Kernel
         path: |
           kernel_root/out/arch/arm64/boot/Image
+      working-directory: kernel_root
+
+    - name: Prepare AnyKernel3
+      if: github.event.inputs.BUILD_TARGET == 'kernel'
+      run: |
+        git clone https://github.com/zaraknyu/AnyKernel3 AnyKernel3
+      working-directory: kernel_root
 
     - name: Prepare AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
