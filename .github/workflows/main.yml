@@ -85,13 +85,13 @@ jobs:
       working-directory: kernel_root
       
     - name: Upload artifacts
+      working-directory: kernel_root
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
         name: Build
         path: |
           kernel_root/out/arch/arm64/boot/Image
-      working-directory: kernel_root
 
     - name: Prepare anykernel3
       run: |
