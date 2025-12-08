@@ -59,6 +59,7 @@ jobs:
     - name: Build kernel
       id: buildKernel
       run: |
+        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
         export PATH="$(pwd)/toolchains/bin:${PATH}"
         export TOOLCHAIN_PATH="$(pwd)/bin"
         export LD_LIBRARY_PATH="$(pwd)/lib:${LD_LIBRARY_PATH}"
