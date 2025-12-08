@@ -97,11 +97,10 @@ jobs:
         git clone https://github.com/zaraknyu/AnyKernel3 -b warm AnyKernel3
       working-directory: kernel_root
 
-    - name: Prepare AnyKernel3
+    - name: Copying AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
         cp kernel_root/out/arch/arm64/boot/Image kernel_root/AnyKernel3/Image
-      working-directory: kernel_root
 
     - name: Build AnyKernel3 zip
       if: github.event.inputs.BUILD_TARGET == 'kernel'
