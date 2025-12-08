@@ -96,7 +96,7 @@ jobs:
     - name: Clone AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
-        git clone https://github.com/zaraknyu/AnyKernel3 AnyKernel3
+        git clone https://github.com/zaraknyu/AnyKernel3 -b warm AnyKernel3
       working-directory: kernel_root
 
     - name: Prepare AnyKernel3
