@@ -102,7 +102,7 @@ jobs:
       run: |
         cp kernel_root/out/arch/arm64/boot/Image kernel_root/AnyKernel3/Image
 
-    - name: Build AnyKernel3 zip
+    - name: Build AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
         cd AnyKernel3
