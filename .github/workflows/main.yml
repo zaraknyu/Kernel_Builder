@@ -1,4 +1,4 @@
-name: Build Kernel
+namname: Build Kernel
 on:
   workflow_dispatch:
     inputs:
@@ -90,7 +90,7 @@ jobs:
       with:
         name: Build
         path: |
-          out/arch/arm64/boot/Image
+          kernel_root/out/arch/arm64/boot/Image
       working-directory: kernel_root
 
     - name: Prepare anykernel3
@@ -115,87 +115,5 @@ jobs:
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
-        name: AnyKernel3-${{ steps.buildKernel.outputs.buildDetails }}
-        path: kernel_root/AnyKernel3-*.zip        path: kernel_root
-        repository: xiaomi-warm-devs/android_kernel_xiaomi_sm4635
-        ref: ${{ github.event.inputs.BRANCH }}
-        show-progress: false
-
-    - name: Prepare dependencies
-      run: |
-        sudo apt update && sudo apt install -y git device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full android-sdk-libsparse-utils erofs-utils \
-            default-jdk git gnupg flex bison gperf build-essential zip curl libc6-dev libncurses-dev libx11-dev libreadline-dev libgl1 libgl1-mesa-dev \
-            python3 make sudo gcc g++ bc grep tofrodos python3-markdown libxml2-utils xsltproc zlib1g-dev python-is-python3 libc6-dev libtinfo6 \
-            make repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd rsync --fix-missing && wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
-        
-    - name: Fetch toolchains
-      run: |
-        mkdir toolchains
-        cd toolchains
-        URL="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r547379.tar.gz"
-        echo "[+] Fetching Clang 20 ..."
-        wget -q -O clang.tar.gz $URL
-        tar -xf clang.tar.gz && rm clang.tar.gz && cd ..
-      working-directory: kernel_root
-      
-    - name: Build kernel
-      id: buildKernel
-      run: |
-        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-        export PATH="$(pwd)/toolchains/bin:${PATH}"
-        export TOOLCHAIN_PATH="$(pwd)/bin"
-        export LD_LIBRARY_PATH="$(pwd)/lib:${LD_LIBRARY_PATH}"
-        export BUILD_CC="$(pwd)/bin/clang"
-        export O="${KERNEL_ROOT}/out"
-        export ARCH=arm64
-        export CROSS_COMPILE=aarch64-linux-gnu-
-        export CLANG_TRIPLE=aarch64-linux-gnu-
-        export CC="${BUILD_CC}"
-        export LLVM=1
-        export LLVM_IAS=1
-        export AR="${TOOLCHAIN_PATH}/llvm-ar"
-        export NM="${TOOLCHAIN_PATH}/llvm-nm"
-        export LD="${TOOLCHAIN_PATH}/ld.lld"
-        export STRIP="${TOOLCHAIN_PATH}/llvm-strip"
-        export OBJCOPY="${TOOLCHAIN_PATH}/llvm-objcopy"
-        export OBJDUMP="${TOOLCHAIN_PATH}/llvm-objdump"
-        export READELF="${TOOLCHAIN_PATH}/llvm-readelf"
-        export HOSTCC="${TOOLCHAIN_PATH}/clang"
-        export HOSTCXX="${TOOLCHAIN_PATH}/clang++"
-        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/warm_GKI.config vendor/pitti_GKI.config
-        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j32
-      working-directory: kernel_root
-      
-    - name: Upload artifacts
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      uses: actions/upload-artifact@v4
-      with:
-        name: Build
-        path: |
-          out/arch/arm64/boot/Image
-      working-directory: kernel_root
-
-    - name: Prepare anykernel3
-      run: |
-        git clone https://github.com/zaraknyu/AnyKernel3 -b warm AnyKernel3
-      working-directory: kernel_root
-
-    - name: Prepare AnyKernel3
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      run: |
-        cp kernel_root/out/arch/arm64/boot/Image kernel_root/AnyKernel3/Image
-      working-directory: kernel_root
-
-    - name: Build AnyKernel3 zip
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      run: |
-        cd kernel_root/AnyKernel3
-        zip -r9 ../AnyKernel3-${{ github.run_id }}.zip *
-      working-directory: kernel_root
-
-    - name: Upload AnyKernel3
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      uses: actions/upload-artifact@v4
-      with:
-        name: AnyKernel3-${{ steps.buildKernel.outputs.buildDetails }}
+        name: AnyKernel3-${{ github.run_id }}.zip
         path: kernel_root/AnyKernel3-*.zip
