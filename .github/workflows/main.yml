@@ -90,7 +90,7 @@ jobs:
       with:
         name: Build
         path: |
-          kernel_root/out/arch/arm64/boot/Image
+          out/arch/arm64/boot/Image
       working-directory: kernel_root
 
     - name: Prepare anykernel3
