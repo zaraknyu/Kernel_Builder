@@ -93,7 +93,7 @@ jobs:
           kernel_root/out/arch/arm64/boot/Image
       working-directory: kernel_root
 
-    - name: Prepare AnyKernel3
+    - name: Clone AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
         git clone https://github.com/zaraknyu/AnyKernel3 AnyKernel3
