@@ -85,7 +85,6 @@ jobs:
       working-directory: kernel_root
       
     - name: Upload artifacts
-      working-directory: kernel_root
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
