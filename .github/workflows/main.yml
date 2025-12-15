@@ -92,24 +92,25 @@ jobs:
         path: |
           kernel_root/out/arch/arm64/boot/Image
 
-    - name: Prepare anykernel3
+    - name: Prepare AnyKernel3
       run: |
         git clone https://github.com/zaraknyu/AnyKernel3 -b warm AnyKernel3
       working-directory: kernel_root
 
-    - name: Copying AnyKernel3
+    - name: Copying Image to AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
+        # Copy the kernel Image directly from out folder into AnyKernel3
         cp kernel_root/out/arch/arm64/boot/Image kernel_root/AnyKernel3/Image
 
-    - name: Build AnyKernel3
+    - name: Build AnyKernel3 zip
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
-        cd AnyKernel3
+        cd kernel_root/AnyKernel3
         zip -r9 ../AnyKernel3-${{ github.run_id }}.zip *
       working-directory: kernel_root
 
-    - name: Upload AnyKernel3
+    - name: Upload AnyKernel3 zip
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
