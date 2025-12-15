@@ -81,7 +81,7 @@ jobs:
         export HOSTCC="${TOOLCHAIN_PATH}/clang"
         export HOSTCXX="${TOOLCHAIN_PATH}/clang++"
         make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/warm_GKI.config vendor/pitti_GKI.config
-        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j32
+        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc --all)
       working-directory: kernel_root
       
     - name: Upload artifacts
