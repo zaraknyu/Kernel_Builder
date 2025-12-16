@@ -105,7 +105,7 @@ jobs:
     - name: Build AnyKernel3 zip
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
-        cd kernel_root/AnyKernel3
+        cd AnyKernel3
         zip -r9 ../AnyKernel3-${{ github.run_id }}.zip *
       working-directory: kernel_root
 
