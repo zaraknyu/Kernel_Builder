@@ -35,7 +35,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: xiaomi-warm-devs/android_kernel_xiaomi_sm4635
+        repository: sm4635-development/android_kernel_xiaomi_sm4635
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
 
@@ -106,12 +106,12 @@ jobs:
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       run: |
         cd AnyKernel3
-        zip -r9 ../AnyKernel3-${{ github.run_id }} *
+        zip -r ../AnyKernel3-${{ github.run_id }} *
       working-directory: kernel_root
 
-    - name: Upload AnyKernel3 zip
+    - name: Upload AnyKernel3
       if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
-        name: AnyKernel3-${{ github.run_id }}.zip
-        path: kernel_root/AnyKernel3-*.zip
+        name: AnyKernel3-${{ github.run_id }}
+        path: kernel_root/AnyKernel3-*
