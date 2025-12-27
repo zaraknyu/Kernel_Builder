@@ -82,14 +82,6 @@ jobs:
         make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/warm_GKI.config vendor/pitti_GKI.config
         make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc --all)
       working-directory: kernel_root
-      
-    - name: Upload artifacts
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      uses: actions/upload-artifact@v4
-      with:
-        name: Build
-        path: |
-          kernel_root/out/arch/arm64/boot/Image
 
     - name: Prepare AnyKernel3
       run: |
