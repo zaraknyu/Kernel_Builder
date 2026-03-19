@@ -4,7 +4,7 @@ on:
     inputs:
       BRANCH:
         description: Kernel branch
-        default: 'lineage-23.0'
+        default: 'master'
         required: true
       BUILD_TARGET:
         description: 'Build target'
@@ -16,7 +16,7 @@ on:
       TARGET_DEVICE:
         description: 'Target Device'
         required: true
-        default: 'warm'
+        default: 'mumba'
         type: choice
         options:
           - warm
@@ -35,7 +35,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         path: kernel_root
-        repository: sm4635-development/android_kernel_xiaomi_sm4635
+        repository: zaraknyu/android_kernel_motorola_sm6435
         ref: ${{ github.event.inputs.BRANCH }}
         show-progress: false
 
@@ -79,7 +79,7 @@ jobs:
         export READELF="${TOOLCHAIN_PATH}/llvm-readelf"
         export HOSTCC="${TOOLCHAIN_PATH}/clang"
         export HOSTCXX="${TOOLCHAIN_PATH}/clang++"
-        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/warm_GKI.config vendor/warm_consolidate.config vendor/pitti_GKI.config vendor/pitti_consolidate.config
+        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/parrot_perf.config vendor/ext_config/moto-parrot.config vendor/ext_config/moto-parrot-gki.config vendor/ext_config/moto-parrot-mumba.config vendor/parrot_consolidate.config vendor/parrot_tuivm.config vendor/parrot_tuivm_debug.config vendor/ext_config/debug-parrot.config
         make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc --all)
       working-directory: kernel_root
       
@@ -90,28 +90,3 @@ jobs:
         name: Build
         path: |
           kernel_root/out/arch/arm64/boot/Image
-
-    - name: Prepare AnyKernel3
-      run: |
-        git clone https://github.com/zaraknyu/AnyKernel3 -b warm AnyKernel3
-      working-directory: kernel_root
-
-    - name: Copying Image to AnyKernel3
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      run: |
-        # Copy the kernel Image directly from out folder into AnyKernel3
-        cp kernel_root/out/arch/arm64/boot/Image kernel_root/AnyKernel3/Image
-
-    - name: Build AnyKernel3
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      run: |
-        cd AnyKernel3
-        zip -r ../AnyKernel3-${{ github.run_id }} *
-      working-directory: kernel_root
-
-    - name: Upload AnyKernel3
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
-      uses: actions/upload-artifact@v4
-      with:
-        name: AnyKernel3-${{ github.run_id }}
-        path: kernel_root/AnyKernel3-*
