@@ -6,32 +6,12 @@ on:
         description: Kernel branch
         default: 'master'
         required: true
-      BUILD_TARGET:
-        description: 'Build target'
-        required: true
-        default: 'kernel'
-        type: choice
-        options:
-          - kernel
-      TARGET_DEVICE:
-        description: 'Target Device'
-        required: true
-        default: 'mumba'
-        type: choice
-        options:
-          - warm
-      SILENT_BUILD:
-        description: Silent Build logs
-        type: boolean
-        
+
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: secureEnvironment
     steps:
-    - name: Get date
-      id: rundate
-      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
     - uses: actions/checkout@v4
       with:
         path: kernel_root
@@ -84,7 +64,6 @@ jobs:
       working-directory: kernel_root
       
     - name: Upload artifacts
-      if: github.event.inputs.BUILD_TARGET == 'kernel'
       uses: actions/upload-artifact@v4
       with:
         name: Build
