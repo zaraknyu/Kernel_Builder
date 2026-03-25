@@ -59,7 +59,7 @@ jobs:
         export READELF="${TOOLCHAIN_PATH}/llvm-readelf"
         export HOSTCC="${TOOLCHAIN_PATH}/clang"
         export HOSTCXX="${TOOLCHAIN_PATH}/clang++"
-        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/parrot_perf.config vendor/ext_config/moto-parrot.config vendor/ext_config/moto-parrot-gki.config vendor/ext_config/moto-parrot-mumba.config
+        make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y gki_defconfig vendor/parrot_perf.config vendor/ext_config/moto-parrot-mumba.config
         make -C $(pwd) O=$(pwd)/out KCFLAGS=-w CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc --all)
       working-directory: kernel_root
       
